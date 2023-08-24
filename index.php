@@ -155,9 +155,9 @@ function editProject(uniqueID) {
         echo $_SESSION["msg"];
     }
     session_destroy();
-    ?>
+    ?><br>
     
-    <button onclick="toggleForm()">Add New</button>
+    <button id="saveForm" onclick="toggleForm()">Add New</button>
     
     <button onclick="showdata()"  id="showlist">Show List</button>
 
@@ -185,7 +185,7 @@ function editProject(uniqueID) {
         <option value="completed">Completed</option>
       </select><br>
 
-      <input type="submit" name="submit" value="Save">
+      <input id="formbtn" type="submit" name="submit" value="Save">
       
     </form>
     <div id="editForm" style="display: none;">
@@ -218,38 +218,14 @@ function editProject(uniqueID) {
        echo "<td>" . $project['ProjectName'] . "</td>";
        echo "<td>" . $project['DiscussDate'] . "</td>";
        echo "<td>" . $project['Status'] . "</td>";
-       echo "<td><button onclick='editform()'>Edit</button></td>";
+       echo '<td><button data-status="' . $project['Status'] . '" data-name="' . $project['ProjectName'] . '" data-thought="' . $project['ThoughtBy'] . '" id="EditForm' . $project['id'] . '" onclick="toggleForm(); valueChange(\'EditForm' . $project['id'] . '\')">Edit</button></td>';
+
        echo "</tr>";
    }
    echo "</table>";
 
 ?>
- <form action="Controller/control.php" id="editproject" class="hidden" method="POST" >
-    <input type="text" name="id" > 
-     <label for="thoughtBy">Thought By:</label>
-     <input type="text" id="thoughtBy" name="thoughtBy" required><br>
 
-     <label for="projectName">Project Name:</label>
-     <input type="text" id="projectName" name="projectName" required><br>
-
-     <label for="discussDate">To be discussed on:</label>
-     <input type="date" id="discussDate" name="discussDate" required><br>
-
-     <label for="status">Status:</label>
-     <select id="status" name="status">
-       <option value="pending">Pending</option>
-       <option value="in_progress">In Progress</option>
-       <option value="completed">Completed</option>
-     </select><br>
-
-     <input type="submit" name="edit" value="Save">
-     
-   </form>        
-                
-               
-    
-
-    
   </div>
 
   <script>
@@ -274,6 +250,37 @@ function editProject(uniqueID) {
       }
     }
   }
+
+  
+  function valueChange(id){
+  button = document.getElementById(id);
+
+    btn = document.getElementById("formbtn");
+    btn.value = "Edit";
+    btn.name = "Editform";
+    thoughtBy = document.getElementById("thoughtBy");
+    name1 = document.getElementById("projectName");
+    status1 = document.getElementById("status");
+
+
+   
+  var status = button.getAttribute('data-status');
+  var name = button.getAttribute('data-name');
+  var thought = button.getAttribute('data-thought');
+
+  thoughtBy.value = thought;
+  name1.value = name;
+  status1.value = status;
+
+  }
+  // document.getElementById("EditForm").addEventListener("click", valueChange);
+
+  function valueChange1(){
+    btn = document.getElementById("formbtn");
+    btn.value = "save";
+    btn.name = "submit";
+  }
+  document.getElementById("saveForm").addEventListener("click", valueChange1);
 
   // Attach the filterTable function to the "keyup" event of the search input
   document.getElementById("searchInput").addEventListener("keyup", filterTable);
